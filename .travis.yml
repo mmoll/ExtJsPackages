@@ -2,19 +2,20 @@ language: node_js
 node_js:
   - "0.12"
 env:
-  global:
-    - EXTJS_VERSION="5.1.1"
-    - SENCHA_CMD_VERSION="5.1.3.61"
+  matrix:
+    - EXTJS_VERSION="5.1.1" SENCHA_CMD_VERSION="5.1.3.61" SENCHA_CMD_SUFFIX="x64.run" SENCHA_CMD_JRE="" SENCHA_CMD_SILENT="--mode unattended"
+    - EXTJS_VERSION="6.0.0" SENCHA_CMD_VERSION="6.0.0.202" SENCHA_CMD_SUFFIX="amd64.sh" SENCHA_CMD_JRE="no-jre/" SENCHA_CMD_SILENT="-q"
+
 before_script:
   # download & install ext-js
   - "wget cdn.sencha.com/ext/gpl/ext-${EXTJS_VERSION}-gpl.zip"
   - "unzip -q ext-${EXTJS_VERSION}-gpl.zip"
   - "ln -s ext-${EXTJS_VERSION} ext"
   # download & install sencha command
-  - "wget http://cdn.sencha.com/cmd/${SENCHA_CMD_VERSION}/SenchaCmd-${SENCHA_CMD_VERSION}-linux-x64.run.zip"
-  - "unzip -q SenchaCmd-${SENCHA_CMD_VERSION}-linux-x64.run.zip"
-  - "chmod +x SenchaCmd-${SENCHA_CMD_VERSION}-linux-x64.run"
-  - "./SenchaCmd-${SENCHA_CMD_VERSION}-linux-x64.run --mode unattended"
+  - "wget https://cdn.sencha.com/cmd/${SENCHA_CMD_VERSION}/${SENCHA_CMD_JRE}SenchaCmd-${SENCHA_CMD_VERSION}-linux-${SENCHA_CMD_SUFFIX}.zip"
+  - "unzip -q SenchaCmd-${SENCHA_CMD_VERSION}-linux-${SENCHA_CMD_SUFFIX}.zip"
+  - "chmod +x SenchaCmd-${SENCHA_CMD_VERSION}-linux-${SENCHA_CMD_SUFFIX}"
+  - "./SenchaCmd-${SENCHA_CMD_VERSION}-linux-${SENCHA_CMD_SUFFIX} ${SENCHA_CMD_SILENT}"
   - "export PATH=~/bin/Sencha/Cmd/${SENCHA_CMD_VERSION}:$PATH"
   # install jsduck
   - gem install jsduck
